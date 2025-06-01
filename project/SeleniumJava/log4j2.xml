@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="https://logging.apache.org/xml/ns"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+                  https://logging.apache.org/xml/ns/log4j-config-2.xsd">
+	<Appenders>
+		<!-- Console Appender -->
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<!-- File Appender -->
+		<File name="File"
+			fileName="src/main/resources/logs/application1.log" append="false">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
+
+		<!-- Rolling File Appender -->
+		<RollingFile name="RollingFile"
+			fileName="src/main/resources/logs/application2.log"
+			filePattern="src/main/resources/logs/application-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+
+		<!-- Database Appender (JDBC) -->
+		<JDBC name="Database" tableName="application_logs">
+			<DriverManager
+				connectionString="jdbc:mysql://127.0.0.1:3306/Selenium_Testing"
+				driverClassName="com.mysql.cj.jdbc.Driver" username="root"
+				password="pas$M0rd@9339" />
+			<Column name="log_timestamp" isEventTimestamp="true" />
+			<Column name="log_level" pattern="%level" isUnicode="false" />
+			<Column name="log_message" pattern="%message" isClob="false"
+				isUnicode="false" />
+		</JDBC>
+
+		<!-- HTTP Appender <Http name="HttpAppender" url="http://localhost:8081/logs" 
+			method="POST"> <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level 
+			%logger{36} - %msg%n" /> </Http> -->
+
+		<!-- SMTP Appender -->
+		<SMTP>
+			<name>EmailAppender</name>
+			<subject>Application Logs</subject>
+			<to>debkaransinghania@gmail.com</to>
+			<from>debkaransinghania@gmail.com</from>
+			<smtpHost>smtp.gmail.com</smtpHost>
+			<smtpPort>465</smtpPort>
+			<ignoreExceptions>false</ignoreExceptions>
+			<smtpUsername>debkaransinghania@gmail.com</smtpUsername>
+			<smtpPassword>rzodscylcjcgfxud</smtpPassword>
+			<smtpProtocol>smtps</smtpProtocol>
+			<bufferSize>50000</bufferSize>
+			<HtmlLayout charset="UTF-8" locationInfo="true" />
+		</SMTP>
+
+	</Appenders>
+	<Loggers>
+		<!-- Root Logger -->
+		<Root level="TRACE">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="File" />
+			<AppenderRef ref="RollingFile" />
+			<AppenderRef ref="Database" />
+			<!-- <AppenderRef ref="HttpAppender" /> -->
+			<AppenderRef ref="EmailAppender" /> <!-- <AppenderRef ref="SyslogAppender" /> <AppenderRef ref="KafkaAppender" 
+				/> -->
+		</Root>
+	</Loggers>
+</Configuration>
