@@ -4,7 +4,7 @@
     <parameter name="browser" value="Chrome"></parameter>
     <parameter name="env" value="Regression"></parameter>
         <classes>
-            <class name="testngparameterization.ReadTestDataFromXML"/>
+            <class name="testng.ReadTestDataFromXML"/>
         </classes>
     </test>
 </suite>
