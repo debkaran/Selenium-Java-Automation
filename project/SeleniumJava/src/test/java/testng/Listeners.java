@@ -59,10 +59,10 @@ public class Listeners implements ITestListener {
 	public void onTestSuccess(ITestResult result) {
 
 		String methodName = result.getMethod().getMethodName();
+		CapturingScreenshot.captureScreenshot(methodName);
 		String logText = "<b>" + "TEST CASE:- " + methodName.toUpperCase() + " PASSED" + "<b>";
 		Markup m = MarkupHelper.createLabel(logText, ExtentColor.GREEN);
 		testReports.get().pass(m);
-		CapturingScreenshot.captureScreenshot(methodName);
 	}
 
 	/**

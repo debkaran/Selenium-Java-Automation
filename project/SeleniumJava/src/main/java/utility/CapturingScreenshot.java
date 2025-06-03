@@ -20,7 +20,7 @@ public class CapturingScreenshot {
 		int sec = cal.get(Calendar.SECOND);
 		int min = cal.get(Calendar.MINUTE);
 		int date = cal.get(Calendar.DATE);
-		int day = cal.get(Calendar.HOUR_OF_DAY);
+		int day = cal.get(Calendar.HOUR);
 
 		try {
 			File scrFile = ((TakesScreenshot) ChromeBrowserSetup.getInstance().getDriver())
