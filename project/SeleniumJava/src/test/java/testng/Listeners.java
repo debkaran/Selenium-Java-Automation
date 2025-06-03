@@ -43,12 +43,6 @@ public class Listeners implements ITestListener {
 	@Override
 	public void onTestStart(ITestResult result) {
 
-		try {
-			FileUtils.cleanDirectory(new File(System.getProperty("user.dir") + "/reports"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		ExtentTest test = extent
 				.createTest(result.getTestClass().getName() + " @TestCase: " + result.getMethod().getMethodName());
 		testReports.set(test);
@@ -68,6 +62,7 @@ public class Listeners implements ITestListener {
 		String logText = "<b>" + "TEST CASE:- " + methodName.toUpperCase() + " PASSED" + "<b>";
 		Markup m = MarkupHelper.createLabel(logText, ExtentColor.GREEN);
 		testReports.get().pass(m);
+		CapturingScreenshot.captureScreenshot(methodName);
 	}
 
 	/**
@@ -145,6 +140,13 @@ public class Listeners implements ITestListener {
 	@Override
 	public void onStart(ITestContext context) {
 
+		try {
+			FileUtils.cleanDirectory(new File(System.getProperty("user.dir") + "/reports"));
+			FileUtils.cleanDirectory(new File(System.getProperty("user.dir") + "/screenshot"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -157,19 +159,22 @@ public class Listeners implements ITestListener {
 	@Override
 	public void onFinish(ITestContext context) {
 
+		if (extent != null) {
+			extent.flush();
+		}
 		try {
+			CreateZipFile.createZipFromFolder(System.getProperty("user.dir") + "/reports",
+					System.getProperty("user.dir") + "/zip/Report.zip");
 			CreateZipFile.createZipFromFolder(System.getProperty("user.dir") + "/screenshot",
-					System.getProperty("user.dir") + "/zip/Reports.zip");
+					System.getProperty("user.dir") + "/zip/Screenshot.zip");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		MonitoringMail mail = new MonitoringMail();
 		mail.sendMail(TestConfig.server, TestConfig.from, TestConfig.to, TestConfig.subject, TestConfig.messageBody,
-				System.getProperty("user.dir") + "/zip/Reports.zip", "Reports.zip");
+				Arrays.asList(System.getProperty("user.dir") + "/zip/Screenshot.zip",
+						System.getProperty("user.dir") + "/zip/Report.zip"));
 
-		if (extent != null) {
-			extent.flush();
-		}
 	}
 }
