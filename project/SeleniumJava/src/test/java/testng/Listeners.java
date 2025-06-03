@@ -1,9 +1,11 @@
 package testng;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import org.apache.commons.io.FileUtils;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -27,9 +29,7 @@ public class Listeners implements ITestListener {
 	String fileName = System.getProperty("user.dir") + "/reports/Extent" + "_" + cal.get(Calendar.YEAR) + "_"
 			+ cal.get(Calendar.DATE) + "_" + (cal.get(Calendar.MONTH) + 1) + "_" + cal.get(Calendar.HOUR) + "_"
 			+ cal.get(Calendar.MINUTE) + "_" + cal.get(Calendar.SECOND) + ".html";
-
-	private ExtentReports extent = ExtentManager
-			.createInstance(fileName);
+	private ExtentReports extent = ExtentManager.createInstance(fileName);
 	private ThreadLocal<ExtentTest> testReports = new ThreadLocal<>();
 
 	/**
@@ -43,6 +43,12 @@ public class Listeners implements ITestListener {
 	@Override
 	public void onTestStart(ITestResult result) {
 
+		try {
+			FileUtils.cleanDirectory(new File(System.getProperty("user.dir") + "/reports"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ExtentTest test = extent
 				.createTest(result.getTestClass().getName() + " @TestCase: " + result.getMethod().getMethodName());
 		testReports.set(test);
