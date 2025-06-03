@@ -1,5 +1,7 @@
 package sendingmails;
 
+import java.util.Arrays;
+
 import config.TestConfig;
 
 public class TestMail {
@@ -12,6 +14,7 @@ public class TestMail {
 
 		MonitoringMail mail = new MonitoringMail();
 		mail.sendMail(TestConfig.server, TestConfig.from, TestConfig.to, TestConfig.subject, TestConfig.messageBody,
-				TestConfig.attachmentPath, TestConfig.attachmentName);
+				Arrays.asList(System.getProperty("user.dir") + "/zip/Screenshot.zip",
+						System.getProperty("user.dir") + "/zip/Report.zip"));
 	}
 }

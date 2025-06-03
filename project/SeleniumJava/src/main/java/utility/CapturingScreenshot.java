@@ -27,7 +27,6 @@ public class CapturingScreenshot {
 					.getScreenshotAs(OutputType.FILE);
 			String screenshotPath = System.getProperty("user.dir") + "/screenshot/" + methodName + "_" + year + "_"
 					+ date + "_" + (month + 1) + "_" + day + "_" + min + "_" + sec + ".jpeg";
-			FileUtils.cleanDirectory(new File(System.getProperty("user.dir") + "/screenshot"));
 			FileUtils.copyFile(scrFile, new File(screenshotPath));
 		} catch (IOException e) {
 			e.printStackTrace();
