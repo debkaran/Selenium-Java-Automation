@@ -25,7 +25,7 @@ public class ReadOperatorAndCalculateTwoValues {
 
 	private static WebDriver driver = null;
 
-	private String checkBoxValue = "No", answer;
+	private String answer;
 
 	private ReadOperatorAndCalculateTwoValues(WebDriver driver) {
 
@@ -35,7 +35,7 @@ public class ReadOperatorAndCalculateTwoValues {
 	private void calculateNumbersAndWriteIntoATextBox() {
 
 		readTextFromUI();
-		WebPageUtilities.selectChkBox(driver, checkBoxValue);
+		WebPageUtilities.selectRadioBox(driver);
 		if (elemMathQns.isDisplayed()) {
 			String operator = elemMathQns.getText().split(" ")[1];
 			int num1 = Integer.parseInt(elemMathQns.getText().split(" ")[0]);

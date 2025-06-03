@@ -61,14 +61,12 @@ public class WebPageUtilities {
 		}
 	}
 
-	public static void selectChkBox(WebDriver driver, String checkBoxValue) {
+	public static void selectRadioBox(WebDriver driver) {
 
-		WebElement elemCheckBox = driver
-				.findElement(By.xpath("//span[text()='" + checkBoxValue.substring(0, 1).toUpperCase()
-						+ checkBoxValue.substring(1).toLowerCase() + "']/preceding-sibling::input[1]"));
-		if (elemCheckBox.isDisplayed()) {
-			if (!elemCheckBox.isSelected()) {
-				elemCheckBox.click();
+		WebElement elemRadioBox = driver.findElement(By.cssSelector("input[type='radio']:first-child"));
+		if (elemRadioBox.isDisplayed()) {
+			if (!elemRadioBox.isSelected()) {
+				elemRadioBox.click();
 			}
 			System.out.println("Check Box is selected in UI");
 		}
