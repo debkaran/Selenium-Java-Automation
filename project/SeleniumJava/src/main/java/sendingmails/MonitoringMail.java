@@ -1,5 +1,7 @@
 package sendingmails;
 
+import java.io.File;
+import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -25,7 +27,7 @@ public class MonitoringMail {
 	// String attachmentPath, String attachmentName) throws MessagingException,
 	// AddressException
 	public void sendMail(String mailServer, String from, String[] to, String subject, String messageBody,
-			String attachmentPath, String attachmentName) {
+			List<String> attachmentNames) {
 
 		Properties props = new Properties();
 		props.setProperty("mail.smtp.host", mailServer);
@@ -53,13 +55,20 @@ public class MonitoringMail {
 			body.setContent(messageBody, "text/html");
 
 			// add attachment in mail
-			BodyPart attachment = new MimeBodyPart();
-			DataSource source = new FileDataSource(attachmentPath);
-			attachment.setDataHandler(new DataHandler(source));
-			attachment.setFileName(attachmentName);
 			MimeMultipart multipart = new MimeMultipart();
 			multipart.addBodyPart(body);
-			multipart.addBodyPart(attachment);
+			for (String attachmentName : attachmentNames) {
+				File file = new File(attachmentName);
+				if (file.exists() && file.isFile()) {
+					BodyPart attachment = new MimeBodyPart();
+					DataSource source = new FileDataSource(file);
+					attachment.setDataHandler(new DataHandler(source));
+					attachment.setFileName(file.getName());
+					multipart.addBodyPart(attachment);
+				} else {
+					System.err.println("Skipping invalid attachment: " + attachmentName);
+				}
+			}
 			message.setContent(multipart);
 			Transport.send(message);
 			System.out.println("Sucessfully Sent mail to All Users");
